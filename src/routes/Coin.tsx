@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 //문서 전체에 스타일을 적용시킨다
 import Chart from "./Chart";
 import Price from "./Price";
+import { Helmet } from "react-helmet";
 import {
     Switch,
     Route,
@@ -156,8 +157,13 @@ interface PriceData {
         };
     };
 };
+
+interface ICoinProps {
+    isDark: boolean;
+};
+
 //useRouteMatch: 저 유알엘에 있는지를 확인해주는 역할
-function Coin() {
+function Coin( {isDark}: ICoinProps) {
 
     const { coinId } = useParams<Params>();
     const { state } = useLocation<RouteState>();
@@ -167,6 +173,8 @@ function Coin() {
     const {isLoading: tickersLoading, data:tickersData} = useQuery<PriceData>(["tickers", coinId], () => fetchCoinTickers(coinId))
     //key가 같으므로 "info", "tickers" 로 구분 , isLoading도 마찬가지
     // : 를 통해 이름을 붙여주는것(같은걸 방지)
+    // useQuery의 세번째 인자로는 몇초마다 패치해줄건지 설정해줄수 있음
+
     /*
     const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState<InfoData>();
@@ -186,9 +194,16 @@ function Coin() {
     }, [coinId]);//url은 안변할것이므로 한번만 실행될것임
     */
     //loading부분은 state가 없을 경우 즉 url로 바로들어올때 실행될것
+
+    //Helmet은 우리문서의 이름을 정하기 위해 사용한다
     const loading = infoLoading || tickersLoading;
     return ( 
         <Container>
+            <Helmet> 
+                <title>
+                    {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+                </title>
+            </Helmet>
             <Header>
             <Title>
                 {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
@@ -206,8 +221,8 @@ function Coin() {
                     <span>${infoData?.symbol}</span>
                 </OverviewItem>
                 <OverviewItem>
-                    <span>Open Source:</span>
-                    <span>{infoData?.open_source ? "Yes" : "No"}</span>
+                    <span>Price:</span>
+                    <span>{tickersData?.quotes.USD.price.toFixed(3)}</span>
                 </OverviewItem>
             </Overview>
             <Description>{infoData?.description}</Description>
@@ -233,11 +248,11 @@ function Coin() {
             
             
             <Switch>
-                <Route path={`/${coinId}/price`}>
+                <Route path={`/:${coinId}/price`}>
                     <Price />
                 </Route>
-                <Route path={`/${coinId}/chart`}>
-                    <Chart coinId={ coinId }/>
+                <Route path={`/:${coinId}/chart`}>
+                    <Chart isDark = {isDark} coinId={ coinId }/>
                 </Route>
             </Switch>
         </>

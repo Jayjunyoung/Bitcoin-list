@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import {fetchCoins} from "./api";
+import { Helmet } from "react-helmet";
 
 const Img = styled.img`
     width: 35px;
@@ -28,7 +29,7 @@ const CoinsList = styled.ul``;
 
 const Coin = styled.li`
     background-color: white;
-    color: ${props => props.theme.bgColor};
+    color: ${props => props.theme.textColor};
     margin-bottom: 10px;
     border-radius: 15px;
     a {//색깔이 나오는데 0.2초만 소요되게
@@ -68,8 +69,12 @@ interface ICoin {
         type: string;
 }
 
+interface ICoinsProps {
+    toggleDark: () => void;//함수의 타입 의미: 커서를 놓으면 알수있음
+};
 
-function Coins() {//[]를 통해 배열인거까지 설명해주기
+
+function Coins( { toggleDark }:ICoinsProps) {//[]를 통해 배열인거까지 설명해주기
     const { isLoading , data} = useQuery<ICoin[]>(["allCoins"], fetchCoins) ;
     //react-query 사용하는 방법
     //fetcher함수 불러와서 로딩중이면 isLoading에다 알려줄거야
@@ -89,8 +94,12 @@ function Coins() {//[]를 통해 배열인거까지 설명해주기
 
     return (//비트코인 이름을 누르면 그 코인의 아이디를 가진 URL로 넘어감
     <Container>
+        <Helmet> 
+            <title>코인</title>
+        </Helmet>
         <Header>
             <Title>코인</Title>
+            <button onClick={toggleDark}>Toggle Mode</button>
         </Header>
         {isLoading ? <Loader>Loading..</Loader> 
         : <CoinsList>
@@ -107,7 +116,6 @@ function Coins() {//[]를 통해 배열인거까지 설명해주기
                     {coin.name} &rarr;</Link>
                 </Coin>)}
         </CoinsList>}
-        console.log(data);
     </Container>
     );
 }

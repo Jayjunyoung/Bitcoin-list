@@ -7,7 +7,6 @@ import { ThemeProvider } from 'styled-components';
 //import App3 from './App3';
 //import App4 from './App4';
 import App5 from './App5';
-import { theme } from './theme';
 
 
 //밑에 두개는 객체로 구성
@@ -21,9 +20,7 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <div>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
           <App5 />
-        </ThemeProvider>
       </QueryClientProvider>
   </div>
 );

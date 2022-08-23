@@ -5,6 +5,7 @@ import React from 'react';
 
 interface CharProps {
     coinId: string;
+    isDark: boolean;
 }
 
 interface IHistorical {
@@ -18,21 +19,24 @@ interface IHistorical {
     market_cap: number;
 }
 
-function Chart({ coinId } : CharProps) {
-    const { isLoading, data } = useQuery<IHistorical[]>(["price",coinId], () => fetchCoinHistory(coinId));
-    console.log(data);//여기서 못받아오는중
+
+function Chart({ coinId , isDark} : CharProps) {
+    const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv",coinId], () => 
+        fetchCoinHistory(coinId)
+    );
+    console.log(data);//여기서 못받아오는중 : undefined
     return <div>{isLoading ? "Loading chart.." 
     : <ApexChart 
         type="line" 
         series= {[//우리가 차트에 보내고싶어하는 데이터가 들어가있음
             {
-                name: "Price",
+                name: "sales",
                 data: data ? data.map(price => parseFloat(price.close)) : []
             },//data가 있을때 없을때를 삼항연산자를 이용
         ]}
         options = {{
-            theme : {
-                mode: "dark",
+            theme : {//chart의 다크모드 / 라이트모드도 정해주기
+                mode: isDark ? "dark" : "light"
             },
             chart : {
                 height: 500,
