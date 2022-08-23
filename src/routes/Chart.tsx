@@ -27,8 +27,8 @@ function Chart({ coinId } : CharProps) {
         series= {[//우리가 차트에 보내고싶어하는 데이터가 들어가있음
             {
                 name: "Price",
-                data: data?.map((price) => parseFloat(price.close))
-            },
+                data: data ? data.map(price => parseFloat(price.close)) : []
+            },//data가 있을때 없을때를 삼항연산자를 이용
         ]}
         options = {{
             theme : {
