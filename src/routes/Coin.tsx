@@ -159,11 +159,10 @@ interface PriceData {
 };
 
 interface ICoinProps {
-    isDark: boolean;
 };
 
 //useRouteMatch: 저 유알엘에 있는지를 확인해주는 역할
-function Coin( {isDark}: ICoinProps) {
+function Coin( {}: ICoinProps) {
 
     const { coinId } = useParams<Params>();
     const { state } = useLocation<RouteState>();
@@ -252,7 +251,7 @@ function Coin( {isDark}: ICoinProps) {
                     <Price />
                 </Route>
                 <Route path={`/:${coinId}/chart`}>
-                    <Chart isDark = {isDark} coinId={ coinId }/>
+                    <Chart coinId={ coinId }/>
                 </Route>
             </Switch>
         </>

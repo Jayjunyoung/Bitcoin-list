@@ -2,10 +2,11 @@ import { useQuery } from "react-query";
 import { fetchCoinHistory } from './api';
 import ApexChart from "react-apexcharts";//데이터 시각화를 담당
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
 
 interface CharProps {
     coinId: string;
-    isDark: boolean;
 }
 
 interface IHistorical {
@@ -20,7 +21,8 @@ interface IHistorical {
 }
 
 
-function Chart({ coinId , isDark} : CharProps) {
+function Chart({ coinId } : CharProps) {
+    const isDark = useRecoilValue(isDarkAtom)//chart랑 리코일 연결
     const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv",coinId], () => 
         fetchCoinHistory(coinId)
     );
@@ -31,12 +33,12 @@ function Chart({ coinId , isDark} : CharProps) {
         series= {[//우리가 차트에 보내고싶어하는 데이터가 들어가있음
             {
                 name: "sales",
-                data: data ? data.map(price => parseFloat(price.close)) : []
+                data: data ? data.map(price => parseFloat(price.close)) : [],
             },//data가 있을때 없을때를 삼항연산자를 이용
         ]}
         options = {{
             theme : {//chart의 다크모드 / 라이트모드도 정해주기
-                mode: isDark ? "dark" : "light"
+                mode: isDark ? "dark" : "light",
             },
             chart : {
                 height: 500,

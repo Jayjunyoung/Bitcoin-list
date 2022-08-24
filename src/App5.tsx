@@ -4,6 +4,8 @@ import { ReactQueryDevtools } from 'react-query/devtools';//리액트쿼리 개�
 //캐시에 어떤 데이터가 있는지 알려준다
 import { darkTheme, lightTheme } from './theme';
 import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from './atoms';
 
 const GlobalStyle = createGlobalStyle`//css기본값을 설정함
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
@@ -71,15 +73,13 @@ a {
 
 
 //<>: fragment -> 여러개의 컴포넌트를 렌더링 하고싶다면
-function App5() {
-    const [isDark, setIsDark] = useState(false);//다크 라이트 스위치 만들어주기
-    //위해 사용
-    const toggleDark = () => setIsDark(current => !current);
+function App5() {//useRecoilValue: atom과 App을 연결하는 방법
+    const isDark = useRecoilValue(isDarkAtom);//임포트 해오기
     return (
     <>
     <ThemeProvider theme = {isDark ? darkTheme : lightTheme}>
         <GlobalStyle />
-        <Router isDark = {isDark} toggleDark = {toggleDark}/>
+        <Router />
         <ReactQueryDevtools initialIsOpen={true}/>
     </ThemeProvider>
     </> //coins에다가 toggle 함수 보내주기위해 인자에 적기

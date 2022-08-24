@@ -4,20 +4,17 @@ import Coins from "../routes/Coins";
 
 //:coinID : URl이 갖는 변수값을 의미
 
-interface IRouterProps {
-    toggleDark: () => void;//함수의 타입 의미: 커서를 놓으면 알수있음
-    isDark: boolean;
-};
 
+interface IRouterProps {}
 
-function Router({ toggleDark , isDark }:IRouterProps) {
+function Router({} : IRouterProps) {
     return <BrowserRouter>
     <Switch>
         <Route path = "/:coinId">
-            <Coin isDark = {isDark}/>
+            <Coin />
         </Route>
         <Route path = "/">
-            <Coins toggleDark = {toggleDark}/>
+            <Coins />
         </Route>
     </Switch>
     </BrowserRouter>
