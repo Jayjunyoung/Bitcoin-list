@@ -26,14 +26,14 @@ function Chart({ coinId } : CharProps) {
     const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv",coinId], () => 
         fetchCoinHistory(coinId)
     );
-    console.log(data);//여기서 못받아오는중 : undefined
+    console.log(coinId);//여기서 못받아오는중 : undefined
     return <div>{isLoading ? "Loading chart.." 
     : <ApexChart 
         type="line" 
         series= {[//우리가 차트에 보내고싶어하는 데이터가 들어가있음
             {
                 name: "sales",
-                data: data ? data.map(price => parseFloat(price.close)) : [],
+                data: data ? data?.map(price => parseFloat(price.close)) : [],
             },//data가 있을때 없을때를 삼항연산자를 이용
         ]}
         options = {{
