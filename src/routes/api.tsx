@@ -21,9 +21,7 @@ export function fetchCoinTickers(coinId: string) {
 }
 
 export function fetchCoinHistory(coinId: string) {
-    const endDate = Math.floor(Date.now() / 1000); // 밀리세컨즈를 100으로 나누어 seconds로바꿈
-    const startDate = endDate - 60 * 60 * 23 * 7 * 1;//1주일에서 -1시간 한것
-    return fetch(`${Base_URL}/coins/${coinId}/ohlcv/historical?start=${startDate}&end=${endDate}`).then(response => {
-        return response.json();
-    });
+    //const endDate = Math.floor(Date.now() / 1000); // 밀리세컨즈를 100으로 나누어 seconds로바꿈
+    //const startDate = endDate - 60 * 60 * 23 * 7 * 1;//1주일에서 -1시간 한것
+    return fetch(`https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`).then((response) => response.json());
 }

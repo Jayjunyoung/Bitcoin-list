@@ -9,7 +9,7 @@ interface CharProps {
     coinId: string;
 }
 
-interface IHistorical {
+interface IHistorical {//data는 IHistorical의 배열임
     time_open: number;
     time_close: number;
     open: string;
@@ -24,19 +24,19 @@ interface IHistorical {
 function Chart({ coinId } : CharProps) {
     const isDark = useRecoilValue(isDarkAtom)//chart랑 리코일 연결
     const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv",coinId], () => 
-        fetchCoinHistory(coinId)
+        fetchCoinHistory(coinId)//리액트 쿼리
     );
     console.log(coinId);//여기서 못받아오는중 : undefined
     return <div>{isLoading ? "Loading chart.." 
     : <ApexChart 
-        type="line" 
+        type="line" //차트종류: 선
         series= {[//우리가 차트에 보내고싶어하는 데이터가 들어가있음
             {
-                name: "sales",
+                name: "Price",//데이터에 이름을 붙여주는것
                 data: data ? data?.map(price => parseFloat(price.close)) : [],
             },//data가 있을때 없을때를 삼항연산자를 이용
         ]}
-        options = {{
+        options = {{//option의 어떤 props가 있는지 알면 차트를 입맛대로 꾸미기가능
             theme : {//chart의 다크모드 / 라이트모드도 정해주기
                 mode: isDark ? "dark" : "light",
             },
@@ -44,12 +44,37 @@ function Chart({ coinId } : CharProps) {
                 height: 500,
                 width: 500,
                 toolbar: {
-                    show: false,
-                }
+                    show: false,//도구같은걸 가려줌
+                },
+                background: "transparent",
             },
             stroke : {
                 curve: "smooth",
                 width: 1,
+            },
+            yaxis: {
+                show: false,
+            },
+            xaxis: {
+                axisBorder: {show: false},
+                axisTicks: {show: false},
+                labels: {show: false},
+                //type: "datetime",
+                categories: data ? data?.map(price => new Date(price.time_close * 1000)) : [],
+                //날짜 형식을 수정해줌
+            },
+            fill: {
+                type: "gradient", 
+                gradient:{
+                    gradientToColors: ["#0be881"],
+                    stops: [0, 100],
+            }
+            },
+            colors: ["#0fbcf9"],
+            tooltip: {
+                y: {
+                    formatter: (value) => `$ ${value.toFixed(2)}`
+                }
             }
         }}
     />}
