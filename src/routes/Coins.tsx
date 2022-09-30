@@ -27,11 +27,20 @@ const Header = styled.header`
     align-items: center;
 `;
 
+const Button = styled.button`
+    position: absolute;
+    right: 50px;
+    font-weight: bold;
+    background-color: white;
+`;
+
+
 const CoinsList = styled.ul``;
 
 const Coin = styled.li`
+    border: 5px black;
     background-color: white;
-    color: ${props => props.theme.textColor};
+    color: ${props => props.theme.accentColor};
     margin-bottom: 10px;
     border-radius: 15px;
     a {//색깔이 나오는데 0.2초만 소요되게
@@ -43,7 +52,7 @@ const Coin = styled.li`
     &:hover {//&: li를 가져와서 추가적으로 속성을 적용할거야!
         //hover: 마우스를 해당부분에 올리면
         a {
-            color: ${props => props.theme.accentColor};
+            color: #212121;
         }
     }
 `;
@@ -104,7 +113,7 @@ function Coins( { }:ICoinsProps) {//[]를 통해 배열인거까지 설명해주
         </Helmet>
         <Header>
             <Title>코인</Title>
-            <button onClick={toggleDarkAtom}>Toggle Mode</button>
+            <Button onClick={toggleDarkAtom}>모드 변경</Button>
         </Header>
         {isLoading ? <Loader>Loading..</Loader> 
         : <CoinsList>

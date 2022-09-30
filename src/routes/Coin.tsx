@@ -165,6 +165,7 @@ interface ICoinProps {
 function Coin( {}: ICoinProps) {
 
     const { coinId } = useParams<Params>();
+    console.log(useParams());
     const { state } = useLocation<RouteState>();
     const priceMatch = useRouteMatch("/:coinId/price");
     const chartMatch = useRouteMatch("/:coinId/chart");
